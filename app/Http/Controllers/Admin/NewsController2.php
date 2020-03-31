@@ -22,16 +22,18 @@ public function add()
   {
       // admin/news/createにリダイレクトする
       $this->validate($request, News2::$rules);
-
+//フォームの値の検査
       $news = new News2;
       $form = $request->all();
 
       // フォームから画像が送信されてきたら、保存して、$news->image_path に画像のパスを保存する
       if (isset($form['image'])) {
         $path = $request->file('image')->store('public/image');
+        //Storeメソットデータも保存、パスを返す
         $news->image_path = basename($path);
       } else {
           $news->image_path = null;
+          //null空、存在しない。
       }
 
       // フォームから送信されてきた_tokenを削除する
@@ -41,6 +43,8 @@ public function add()
 
       // データベースに保存する
       $news->fill($form);
+      //fill　複数プロパティ(情報)に一括で代入するメソット
+      //$news->fill($form);の説明。
       $news->save();
 
       return redirect('admin/news2/create');
